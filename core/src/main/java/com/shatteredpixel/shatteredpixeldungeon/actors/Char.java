@@ -99,6 +99,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.mergeManagers.charmodifier.CombatModifier;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Bulk;
@@ -484,7 +485,10 @@ public abstract class Char extends Actor {
 				}
 			}
 			
+			dmg = CombatModifier.INSTANCE.attackModify(this, enemy, dmg);
 			int effectiveDamage = enemy.defenseProc( this, Math.round(dmg) );
+			dr = CombatModifier.INSTANCE.defenseModify(this, enemy, dr, effectiveDamage);
+
 			//do not trigger on-hit logic if defenseProc returned a negative value
 			if (effectiveDamage >= 0) {
 				effectiveDamage = Math.max(effectiveDamage - dr, 0);
@@ -644,6 +648,8 @@ public abstract class Char extends Actor {
 			acuRoll *= 1.01f + 0.02f*Dungeon.hero.pointsInTalent(Talent.BLESS);
 		}
 		
+		acuRoll = CombatModifier.INSTANCE.accuracyModify(attacker, defender, acuRoll);
+
 		float defRoll = Random.Float( defStat );
 		if (defender.buff(Bless.class) != null) defRoll *= 1.25f;
 		if (defender.buff(  Hex.class) != null) defRoll *= 0.8f;
@@ -659,6 +665,8 @@ public abstract class Char extends Actor {
 			defRoll *= 1.01f + 0.02f*Dungeon.hero.pointsInTalent(Talent.BLESS);
 		}
 		
+		defRoll = CombatModifier.INSTANCE.evasionModify(attacker, defender, defRoll);
+
 		return (acuRoll * accMulti) >= defRoll;
 	}
 
@@ -899,6 +907,8 @@ public abstract class Char extends Actor {
 		if (buff( Paralysis.class ) != null) {
 			buff( Paralysis.class ).processDamage(dmg);
 		}
+
+		dmg = CombatModifier.INSTANCE.damage(this, dmg, src);
 
 		int shielded = dmg;
 		//FIXME: when I add proper damage properties, should add an IGNORES_SHIELDS property to use here.
@@ -1143,12 +1153,17 @@ public abstract class Char extends Actor {
 			}
 		}
 
+		if(!CombatModifier.INSTANCE.preAddBuff(this, buff)){
+			return false;
+		}
 		if (sprite != null && buff(Challenge.SpectatorFreeze.class) != null){
 			return false; //can't add buffs while frozen and game is loaded
 		}
 
 		buffs.add( buff );
 		if (Actor.chars().contains(this)) Actor.add( buff );
+
+		CombatModifier.INSTANCE.postAddBuff(this,buff);
 
 		if (sprite != null && buff.announced) {
 			switch (buff.type) {

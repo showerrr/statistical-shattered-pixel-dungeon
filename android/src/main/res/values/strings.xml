@@ -1,0 +1,13 @@
+<resources>
+
+<string name="customactivityoncrash_error_activity_error_occurred_explanation">虫子吃掉了你的游戏！\n请打开错误详情并复制后，私聊发给各大官群的沐沐（qq987767678），会尽可能解决害虫</string>
+<string name="customactivityoncrash_error_activity_restart_app">重启游戏</string>
+<string name="customactivityoncrash_error_activity_close_app">关闭游戏</string>
+<string name="customactivityoncrash_error_activity_error_details">打开错误详情</string>
+<string name="customactivityoncrash_error_activity_error_details_title">错误详情</string>
+<string name="customactivityoncrash_error_activity_error_details_close">关闭</string>
+<string name="customactivityoncrash_error_activity_error_details_copy">点击复制信息</string>
+<string name="customactivityoncrash_error_activity_error_details_copied">已经复制到剪切板</string>
+<string name="customactivityoncrash_error_activity_error_details_clipboard_label">错误信息</string>
+
+</resources>

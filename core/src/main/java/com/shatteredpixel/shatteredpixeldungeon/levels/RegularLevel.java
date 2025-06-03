@@ -37,6 +37,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.GoldenMimicForChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicForChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -52,17 +54,22 @@ import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MimicTooth;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Journal;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.Builder;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.FigureEightBuilder;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.LoopBuilder;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretMazeRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.MagicalFireRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.PitRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.PoolRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SentryRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.ShopRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.TrapsRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.StandardRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.entrance.EntranceRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.exit.ExitRoom;
@@ -362,6 +369,10 @@ public abstract class RegularLevel extends Level {
 		// drops 3/4/5 items 60%/30%/10% of the time
 		int nItems = 3 + Random.chances(new float[]{6, 3, 1});
 
+		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
+			nItems += 3;
+		}
+
 		if (feeling == Feeling.LARGE){
 			nItems += 2;
 		}
@@ -378,6 +389,32 @@ public abstract class RegularLevel extends Level {
 			}
 
 			Heap.Type type = null;
+
+			if (Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)) {
+				if (findMob(cell) == null) {
+					if (toDrop instanceof Artifact || (toDrop.isUpgradable() && toDrop.level() > 1) || Random.Int(8) == 0) {
+						mobs.add(GoldenMimicForChallenge.spawnAt(cell, toDrop, GoldenMimicForChallenge.class));
+					} else {
+						mobs.add(MimicForChallenge.spawnAt(cell, toDrop));
+					}
+					continue;
+				}else{
+					type = Heap.Type.CHEST;
+				}
+
+				if (toDrop instanceof Artifact ||
+					(toDrop.isUpgradable() && Random.Int(4 - toDrop.level()) == 0)) {
+						Heap dropped = drop(toDrop, cell);
+						if (heaps.get(cell) == dropped) {
+							dropped.type = Heap.Type.LOCKED_CHEST;
+							addItemToSpawn(new GoldenKey(Dungeon.depth));
+				}
+				} else {
+					Heap dropped = drop(toDrop, cell);
+					dropped.type = type;
+			}
+
+			}else {
 			switch (Random.Int( 20 )) {
 			case 0:
 				type = Heap.Type.SKELETON;
@@ -427,7 +464,8 @@ public abstract class RegularLevel extends Level {
 					dropped.setHauntedIfCursed();
 				}
 			}
-			
+			}
+
 		}
 
 		for (Item item : itemsToSpawn) {

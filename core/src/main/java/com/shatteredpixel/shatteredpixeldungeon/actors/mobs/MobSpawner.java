@@ -22,7 +22,9 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.spawner.MobList;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
 import com.watabou.utils.Random;
 
@@ -32,6 +34,10 @@ import java.util.Arrays;
 public class MobSpawner extends Actor {
 	{
 		actPriority = BUFF_PRIO; //as if it were a buff.
+	}
+
+	private static boolean hasReinforce(int depth){
+		return (Statistics.elite_enemies & (1<<(depth-1)/5))>0;
 	}
 
 	@Override
@@ -59,7 +65,12 @@ public class MobSpawner extends Actor {
 	}
 
 	public static ArrayList<Class<? extends Mob>> getMobRotation(int depth ){
-		ArrayList<Class<? extends Mob>> mobs = standardMobRotation( depth );
+		ArrayList<Class<? extends Mob>> mobs;
+		if (hasReinforce(depth)){
+			mobs = MobList.HardMobList(depth);
+			return mobs;
+		}
+		mobs= standardMobRotation( depth );
 		addRareMobs(depth, mobs);
 		swapMobAlts(mobs);
 		Random.shuffle(mobs);

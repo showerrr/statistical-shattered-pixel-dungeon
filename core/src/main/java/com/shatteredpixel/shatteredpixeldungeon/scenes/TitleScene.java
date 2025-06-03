@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+import com.shatteredpixel.shatteredpixeldungeon.custom.seedfinder.SeedFindScene;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BannerSprites;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Fireball;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
@@ -129,7 +130,8 @@ public class TitleScene extends PixelScene {
 			
 			@Override
 			protected boolean onLongClick() {
-				//making it easier to start runs quickly while debugging
+//				ShatteredPixelDungeon.switchNoFade(SeedFindScene.class);
+//				making it easier to start runs quickly while debugging
 				if (DeviceCompat.isDebug()) {
 					GamesInProgress.selectedClass = null;
 					GamesInProgress.curSlot = 1;
@@ -142,7 +144,13 @@ public class TitleScene extends PixelScene {
 		btnPlay.icon(Icons.get(Icons.ENTER));
 		add(btnPlay);
 
-		StyledButton btnSupport = new SupportButton(GREY_TR, Messages.get(this, "support"));
+		StyledButton btnSupport = new StyledButton(GREY_TR,"种子查询器"){
+			@Override
+			protected void onClick() {
+				ShatteredPixelDungeon.switchNoFade(SeedFindScene.class);
+			}
+		};
+		btnSupport.icon(Icons.get(Icons.MAGNIFY));
 		add(btnSupport);
 
 		StyledButton btnRankings = new StyledButton(GREY_TR,Messages.get(this, "rankings")){

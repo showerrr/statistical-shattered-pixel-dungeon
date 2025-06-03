@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
@@ -744,7 +745,11 @@ public class WndJournal extends WndTabbed {
 	private static void addGridItems( ScrollingGridPane grid, Collection<Class<?>> classes) {
 		for (Class<?> itemClass : classes) {
 
-			boolean seen = Catalog.isSeen(itemClass);;
+			boolean seen = Catalog.isSeen(itemClass);
+			if (Dungeon.isChallenged(Challenges.TEST_MODE)) {
+				seen = true;
+			}
+
 			ItemSprite sprite = null;
 			Image secondIcon = null;
 			String title = "";
@@ -869,7 +874,8 @@ public class WndJournal extends WndTabbed {
 	private static void addGridEntities(ScrollingGridPane grid, Collection<Class<?>> classes) {
 		for (Class<?> entityCls : classes){
 
-			boolean seen = Bestiary.isSeen(entityCls);
+			boolean seen = Dungeon.isChallenged(Challenges.TEST_MODE) || Bestiary.isSeen(entityCls);
+
 			Mob mob = null;
 			Image icon = null;
 			String title = null;
@@ -999,8 +1005,8 @@ public class WndJournal extends WndTabbed {
 
 			Image sprite = doc.pageSprite(page);
 
-			boolean seen = doc.isPageFound(page);
-			boolean read = doc.isPageRead(page);
+			boolean seen = Dungeon.isChallenged(Challenges.TEST_MODE) || doc.isPageFound(page);
+			boolean read = Dungeon.isChallenged(Challenges.TEST_MODE) || doc.isPageRead(page);
 
 			if (!seen){
 				sprite.lightness(0f);

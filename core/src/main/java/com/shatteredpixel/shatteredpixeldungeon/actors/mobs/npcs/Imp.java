@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -248,10 +249,12 @@ public class Imp extends NPC {
 				}
 				
 				given = false;
-				
+
+				int tries111 = 0;
 				do {
-					reward = (Ring)Generator.random( Generator.Category.RING );
-				} while (reward.cursed);
+					reward = (Ring)Generator.random(Generator.Category.RING);
+					tries111++;
+				} while (reward.cursed || (tries111 < 100 && Challenges.isItemBlocked(reward)));
 				reward.upgrade( 2 );
 				reward.cursed = true;
 			}

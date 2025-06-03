@@ -6,4 +6,5 @@ sourceCompatibility = targetCompatibility = appJavaCompatibility
 dependencies {
     api project(':SPD-classes')
     implementation project(':services')
+    implementation 'cat.ereza:customactivityoncrash:2.2.0'
 }

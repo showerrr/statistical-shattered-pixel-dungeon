@@ -206,15 +206,6 @@ public class SPDSettings extends GameSettings {
 		return getBoolean( KEY_SLOTWATERSKIN, true );
 	}
 
-	public static void systemFont(boolean value){
-		put(KEY_SYSTEMFONT, value);
-	}
-
-	public static boolean systemFont(){
-		return getBoolean(KEY_SYSTEMFONT,
-				(language() == Languages.KOREAN || language() == Languages.CHINESE || language() == Languages.JAPANESE));
-	}
-
 	public static void vibration(boolean value){
 		put(KEY_VIBRATION, value);
 	}
@@ -328,46 +319,6 @@ public class SPDSettings extends GameSettings {
 
 	public static final String KEY_NEWS_LAST_READ = "news_last_read";
 
-	public static void news(boolean value){
-		put(KEY_NEWS, value);
-	}
-
-	public static boolean news(){
-		return getBoolean(KEY_NEWS, true);
-	}
-
-	public static void updates(boolean value){
-		put(KEY_UPDATES, value);
-	}
-
-	public static boolean updates(){
-		return getBoolean(KEY_UPDATES, true);
-	}
-
-	public static void betas(boolean value){
-		put(KEY_BETAS, value);
-	}
-
-	public static boolean betas(){
-		return getBoolean(KEY_BETAS, Game.version.contains("BETA") || Game.version.contains("RC"));
-	}
-
-	public static void WiFi(boolean value){
-		put(KEY_WIFI, value);
-	}
-
-	public static boolean WiFi(){
-		return getBoolean(KEY_WIFI, true);
-	}
-
-	public static void newsLastRead(long lastRead){
-		put(KEY_NEWS_LAST_READ, lastRead);
-	}
-
-	public static long newsLastRead(){
-		return getLong(KEY_NEWS_LAST_READ, 0);
-	}
-
 	//Audio
 	
 	public static final String KEY_MUSIC		= "music";
@@ -445,6 +396,59 @@ public class SPDSettings extends GameSettings {
 		} else {
 			return Languages.matchCode(code);
 		}
+	}
+
+	public static void systemFont(boolean value){
+		put(KEY_SYSTEMFONT, value);
+	}
+
+	public static boolean systemFont(){
+		return getBoolean(KEY_SYSTEMFONT,
+				(language() == Languages.CHINESE));
+	}
+
+	//Connectivity
+
+
+
+	public static void news(boolean value){
+		put(KEY_NEWS, value);
+	}
+
+	public static boolean news(){
+		return getBoolean(KEY_NEWS, true);
+	}
+
+	public static void updates(boolean value){
+		put(KEY_UPDATES, value);
+	}
+
+	public static boolean updates(){
+		return getBoolean(KEY_UPDATES, true);
+	}
+
+	public static void betas(boolean value){
+		put(KEY_BETAS, value);
+	}
+
+	public static boolean betas(){
+		return getBoolean(KEY_BETAS, Game.version.contains("BETA") || Game.version.contains("RC"));
+	}
+
+	public static void WiFi(boolean value){
+		put(KEY_WIFI, value);
+	}
+
+	public static boolean WiFi(){
+		return getBoolean(KEY_WIFI, true);
+	}
+
+	public static void newsLastRead(long lastRead){
+		put(KEY_NEWS_LAST_READ, lastRead);
+	}
+
+	public static long newsLastRead(){
+		return getLong(KEY_NEWS_LAST_READ, 0);
 	}
 
 	//Window management (desktop only atm)

@@ -23,6 +23,8 @@ package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 
 public class Challenges {
 
@@ -37,7 +39,20 @@ public class Challenges {
 	public static final int CHAMPION_ENEMIES	= 128;
 	public static final int STRONGER_BOSSES 	= 256;
 
-	public static final int MAX_VALUE           = 511;
+	public static final int SPD_CHALLENGE_MAX = 511;
+
+	public static final int TEST_MODE			= 1<<9;
+	//hero.live for buff, mimic spawning
+	public static final int MIMIC_DUNGEON 		= 1<<15;
+	//Dungeon.newLevel, Hero.speed(for speed limit)
+	public static final int ELITE_BOSSES		= 1<<16;
+	public static final int ELITE_ENEMIES		= 1<<17;
+
+	public static final int EXPANSION_ENCH 		= 1<<18;
+
+	public static final int MINIGAMES			= 1<<10;
+
+	public static final int MAX_VALUE           = (1<<19)-1;
 
 	public static final String[] NAME_IDS = {
 			"champion_enemies",
@@ -48,17 +63,34 @@ public class Challenges {
 			"no_herbalism",
 			"swarm_intelligence",
 			"darkness",
-			"no_scrolls"
+			"no_scrolls",
+
+			"test_mode",
+			"mimic_dungeon",
+			"elite_bosses",
+			"elite_enemies",
+
+			"expansion_ench",
+
+			"minigames"
 	};
 
-	public static final int[] MASKS = {
-			CHAMPION_ENEMIES, STRONGER_BOSSES, NO_FOOD, NO_ARMOR, NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS, NO_SCROLLS
+	public static final long[] MASKS = {
+			CHAMPION_ENEMIES, STRONGER_BOSSES, NO_FOOD, NO_ARMOR, NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS, NO_SCROLLS,
+			TEST_MODE,
+			MIMIC_DUNGEON,
+			ELITE_BOSSES,
+			ELITE_ENEMIES,
+
+			EXPANSION_ENCH,
+
+			MINIGAMES
 	};
 
 	public static int activeChallenges(){
 		int chCount = 0;
-		for (int ch : Challenges.MASKS){
-			if ((Dungeon.challenges & ch) != 0) chCount++;
+		for (long ch : Challenges.MASKS){
+			if ((Dungeon.challenges & ch) != 0 && ch <= SPD_CHALLENGE_MAX) chCount++;
 		}
 		return chCount;
 	}
@@ -67,6 +99,18 @@ public class Challenges {
 
 		if (Dungeon.isChallenged(NO_HERBALISM) && item instanceof Dewdrop){
 			return true;
+		}
+
+		if(Dungeon.isChallenged(ELITE_ENEMIES)){
+			if(item instanceof WandOfBlastWave){
+				return true;
+			}
+		}
+
+		if(Dungeon.isChallenged(ELITE_ENEMIES | ELITE_BOSSES)){
+			if(item instanceof RingOfElements){
+				return true;
+			}
 		}
 
 		return false;

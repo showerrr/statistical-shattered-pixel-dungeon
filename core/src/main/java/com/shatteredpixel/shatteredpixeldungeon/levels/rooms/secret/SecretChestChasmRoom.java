@@ -21,9 +21,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -61,25 +63,54 @@ public class SecretChestChasmRoom extends SecretRoom {
 		Painter.fill(level, this, 1, Terrain.CHASM);
 		
 		int chests = 0;
-		
+
+		//尝试避免生成元素戒指和冲击波法杖
+		Item item1;
+		Item item2;
+		Item item3;
+		Item item4;
+		int tries = 0;
+		do {
+			item1 = Generator.randomUsingDefaults();
+			tries++;
+		} while (tries < 100 && Challenges.isItemBlocked(item1));
+		tries = 0;
+
+		do {
+			item2 = Generator.randomUsingDefaults();
+			tries++;
+		} while (tries < 100 && Challenges.isItemBlocked(item2));
+		tries = 0;
+
+		do {
+			item3 = Generator.randomUsingDefaults();
+			tries++;
+		} while (tries < 100 && Challenges.isItemBlocked(item3));
+		tries = 0;
+
+		do {
+			item4 = Generator.randomUsingDefaults();
+			tries++;
+		} while (tries < 100 && Challenges.isItemBlocked(item4));
+
 		Point p = new Point(left+3, top+3);
 		Painter.set(level, p, Terrain.EMPTY_SP);
-		level.drop(Generator.randomUsingDefaults(), level.pointToCell(p)).type = Heap.Type.LOCKED_CHEST;
+		level.drop(item1, level.pointToCell(p)).type = Heap.Type.LOCKED_CHEST;
 		if (level.heaps.get(level.pointToCell(p)) != null) chests++;
 		
 		p.x = right-3;
 		Painter.set(level, p, Terrain.EMPTY_SP);
-		level.drop(Generator.randomUsingDefaults(), level.pointToCell(p)).type = Heap.Type.LOCKED_CHEST;
+		level.drop(item2, level.pointToCell(p)).type = Heap.Type.LOCKED_CHEST;
 		if (level.heaps.get(level.pointToCell(p)) != null) chests++;
 		
 		p.y = bottom-3;
 		Painter.set(level, p, Terrain.EMPTY_SP);
-		level.drop(Generator.randomUsingDefaults(), level.pointToCell(p)).type = Heap.Type.LOCKED_CHEST;
+		level.drop(item3, level.pointToCell(p)).type = Heap.Type.LOCKED_CHEST;
 		if (level.heaps.get(level.pointToCell(p)) != null) chests++;
 		
 		p.x = left+3;
 		Painter.set(level, p, Terrain.EMPTY_SP);
-		level.drop(Generator.randomUsingDefaults(), level.pointToCell(p)).type = Heap.Type.LOCKED_CHEST;
+		level.drop(item4, level.pointToCell(p)).type = Heap.Type.LOCKED_CHEST;
 		if (level.heaps.get(level.pointToCell(p)) != null) chests++;
 		
 		p = new Point(left+1, top+1);

@@ -2,29 +2,28 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url = uri("https://storage.googleapis.com/r8-releases/raw")
-        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.7.1'
+        classpath 'com.android.tools.build:gradle:8.0.2'
+//        classpath 'com.google.gms:google-services:4.3.13'
+//        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.1'
     }
 }
 
 allprojects {
 
     ext {
-        appName = 'Shattered Pixel Dungeon'
-        appPackageName = 'com.shatteredpixel.shatteredpixeldungeon'
+        appName = 'Statistical SPD'
+        appPackageName = 'com.shatteredpixel.shatteredpixeldungeon.statistical'
 
-        appVersionCode = 831
-        appVersionName = '3.0.0'
+        appVersionCode = 20250322
+        appVersionName = '3.0.0-stat-1'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
-        appAndroidCompileSDK = 34
-        appAndroidMinSDK = 14
-        appAndroidTargetSDK = 34
+        appAndroidCompileSDK = 31
+        appAndroidMinSDK = 19 //14
+        appAndroidTargetSDK = 31
 
         gdxVersion = '1.12.1'
         gdxControllersVersion = '2.2.4-SNAPSHOT'

@@ -73,7 +73,7 @@ abstract public class MissileWeapon extends Weapon {
 	
 	//used to reduce durability from the source weapon stack, rather than the one being thrown.
 	protected MissileWeapon parent;
-	
+
 	public int tier;
 	
 	@Override

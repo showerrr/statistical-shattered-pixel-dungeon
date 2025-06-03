@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.shatteredpixel.shatteredpixeldungeon.statistical",
+  "variantName": "debug",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 20230716,
+      "versionName": "2.1.4-stat-1-INDEV",
+      "outputFile": "android-debug.apk"
+    }
+  ],
+  "elementType": "File"
+}
