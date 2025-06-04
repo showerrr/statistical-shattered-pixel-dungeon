@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -261,11 +261,6 @@ public class HornOfPlenty extends Artifact {
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
-
-		//pre-2.0.0 saves
-		if (partialCharge > 1){
-			partialCharge /= Hunger.STARVING/5f;
-		}
 
 		storedFoodEnergy = bundle.getInt(STORED);
 		

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -556,7 +556,14 @@ public class Toolbar extends Component {
 		}
 
 		float shift = 0;
-		switch(Mode.valueOf(SPDSettings.toolbarMode())){
+		Toolbar.Mode mode;
+		try {
+			mode = Mode.valueOf(SPDSettings.toolbarMode());
+		} catch (Exception e){
+			Game.reportException(e);
+			mode = PixelScene.landscape() ? Mode.GROUP : Mode.SPLIT;
+		}
+		switch(mode){
 			case SPLIT:
 				btnWait.setPos(x, y);
 				btnSearch.setPos(btnWait.right(), y);

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,6 @@ import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class UnstableSpellbook extends Artifact {
 
@@ -330,8 +329,10 @@ public class UnstableSpellbook extends Artifact {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
 		scrolls.clear();
-		if (bundle.contains(SCROLLS)) {
-			Collections.addAll(scrolls, bundle.getClassArray(SCROLLS));
+		if (bundle.contains(SCROLLS) && bundle.getClassArray(SCROLLS) != null) {
+			for (Class<?> scroll : bundle.getClassArray(SCROLLS)) {
+				if (scroll != null) scrolls.add(scroll);
+			}
 		}
 	}
 

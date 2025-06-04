@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -492,14 +492,8 @@ public class Hero extends Char {
 		float accuracy = 1;
 		accuracy *= RingOfAccuracy.accuracyMultiplier( this );
 		
-		if (wep instanceof MissileWeapon){
-			if (Dungeon.level.adjacent( pos, target.pos )) {
-				accuracy *= (0.5f + 0.2f*pointsInTalent(Talent.POINT_BLANK));
-			} else {
-				accuracy *= 1.5f;
-			}
 		//precise assault and liquid agility
-		} else {
+		if (!(wep instanceof MissileWeapon)) {
 			if ((hasTalent(Talent.PRECISE_ASSAULT) || hasTalent(Talent.LIQUID_AGILITY))
 					//does not trigger on ability attacks
 					&& belongings.abilityWeapon != wep && buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) == null){
@@ -1400,9 +1394,10 @@ public class Hero extends Char {
 			if (heroClass != HeroClass.DUELIST
 					&& hasTalent(Talent.AGGRESSIVE_BARRIER)
 					&& buff(Talent.AggressiveBarrierCooldown.class) == null
-					&& (HP / (float)HT) < 0.20f*(1+pointsInTalent(Talent.AGGRESSIVE_BARRIER))){
-				Buff.affect(this, Barrier.class).setShield(3);
-				sprite.showStatusWithIcon(CharSprite.POSITIVE, "3", FloatingText.SHIELDING);
+					&& (HP / (float)HT) <= 0.5f){
+				int shieldAmt = 1 + 2*pointsInTalent(Talent.AGGRESSIVE_BARRIER);
+				Buff.affect(this, Barrier.class).setShield(shieldAmt);
+				sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shieldAmt), FloatingText.SHIELDING);
 				Buff.affect(this, Talent.AggressiveBarrierCooldown.class, 50f);
 
 			}
@@ -1569,33 +1564,40 @@ public class Hero extends Char {
 			GLog.w( Messages.get(this, "pain_resist") );
 		}
 
+		//temporarily assign to a float to avoid rounding a bunch
+		float damage = dmg;
+
 		Endure.EndureTracker endure = buff(Endure.EndureTracker.class);
 		if (!(src instanceof Char)){
 			//reduce damage here if it isn't coming from a character (if it is we already reduced it)
 			if (endure != null){
-				dmg = Math.round(endure.adjustDamageTaken(dmg));
+				damage = endure.adjustDamageTaken(dmg);
 			}
 			//the same also applies to challenge scroll damage reduction
 			if (buff(ScrollOfChallenge.ChallengeArena.class) != null){
-				dmg *= 0.67f;
+				damage *= 0.67f;
 			}
 			//and to monk meditate damage reduction
 			if (buff(MonkEnergy.MonkAbility.Meditate.MeditateResistance.class) != null){
-				dmg *= 0.2f;
+				damage *= 0.2f;
 			}
 		}
 
+		//unused, could be removed
 		CapeOfThorns.Thorns thorns = buff( CapeOfThorns.Thorns.class );
 		if (thorns != null) {
-			dmg = thorns.proc(dmg, (src instanceof Char ? (Char)src : null),  this);
+			damage = thorns.proc((int)damage, (src instanceof Char ? (Char)src : null),  this);
 		}
-
-		dmg = (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
 
 		if (buff(Talent.WarriorFoodImmunity.class) != null){
-			if (pointsInTalent(Talent.IRON_STOMACH) == 1)       dmg = Math.round(dmg*0.25f);
-			else if (pointsInTalent(Talent.IRON_STOMACH) == 2)  dmg = Math.round(dmg*0.00f);
+			if (pointsInTalent(Talent.IRON_STOMACH) == 1)       damage /= 4f;
+			else if (pointsInTalent(Talent.IRON_STOMACH) == 2)  damage = 0;
 		}
+
+		dmg = Math.round(damage);
+
+		//we ceil this one to avoid letting the player easily take 0 dmg from tenacity early
+		dmg = (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
 
 		int preHP = HP + shielding();
 		if (src instanceof Hunger) preHP -= shielding();
@@ -1969,7 +1971,7 @@ public class Hero extends Char {
 				}
 			}
 			if (buff(HallowedGround.HallowedFurrowTracker.class) != null){
-				buff(HallowedGround.HallowedFurrowTracker.class).countDown(percent*5f);
+				buff(HallowedGround.HallowedFurrowTracker.class).countDown(percent*100f);
 				if (buff(HallowedGround.HallowedFurrowTracker.class).count() <= 0){
 					buff(HallowedGround.HallowedFurrowTracker.class).detach();
 				}

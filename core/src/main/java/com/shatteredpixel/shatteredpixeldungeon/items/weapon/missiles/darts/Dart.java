@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -227,11 +227,11 @@ public class Dart extends MissileWeapon {
 	public String info() {
 		updateCrossbow();
 		if (bow != null && !bow.isIdentified()){
-			int level = bow.level();
-			//temporarily sets the level of the bow to 0 for IDing purposes
-			bow.level(0);
+			Crossbow realBow = bow;
+			//create a temporary bow for IDing purposes
+			bow = new Crossbow();
 			String info = super.info();
-			bow.level(level);
+			bow = realBow;
 			return info;
 		} else {
 			return super.info();

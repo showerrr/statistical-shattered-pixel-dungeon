@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -509,7 +509,9 @@ public class WndKeyBindings extends Window {
 			}
 
 			//ignore controller buttons on key bindings, and vice-versa
-			if (ControllerHandler.icControllerKey(event.code) != controller){
+			if (controller && !ControllerHandler.icControllerKey(event.code)){
+				return true;
+			} else if (!controller && !KeyEvent.isKeyboardKey(event.code)){
 				return true;
 			}
 

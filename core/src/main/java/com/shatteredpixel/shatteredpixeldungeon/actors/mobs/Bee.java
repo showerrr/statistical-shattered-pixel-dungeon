@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BeeSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
-
-import java.util.HashSet;
 
 //FIXME the AI for these things is becoming a complete mess, should refactor
 public class Bee extends Mob {
@@ -161,20 +159,22 @@ public class Bee extends Mob {
 					|| (alignment == Alignment.ALLY && enemy.alignment == Alignment.ALLY)
 					|| (buff( Amok.class ) == null && enemy.isInvulnerable(getClass()))){
 				
-				//find all mobs near the pot
-				HashSet<Char> enemies = new HashSet<>();
+				//target closest potential enemy near the pot
+				Char closest = null;
 				for (Mob mob : Dungeon.level.mobs) {
 					if (!(mob == this)
 							&& Dungeon.level.distance(mob.pos, potPos) <= 3
 							&& mob.alignment != Alignment.NEUTRAL
 							&& !mob.isInvulnerable(getClass())
 							&& !(alignment == Alignment.ALLY && mob.alignment == Alignment.ALLY)) {
-						enemies.add(mob);
+						if (closest == null || Dungeon.level.distance(closest.pos, pos) > Dungeon.level.distance(mob.pos, pos)){
+							closest = mob;
+						}
 					}
 				}
 				
-				if (!enemies.isEmpty()){
-					return Random.element(enemies);
+				if (closest != null){
+					return closest;
 				} else {
 					if (alignment != Alignment.ALLY && Dungeon.level.distance(Dungeon.hero.pos, potPos) <= 3){
 						return Dungeon.hero;

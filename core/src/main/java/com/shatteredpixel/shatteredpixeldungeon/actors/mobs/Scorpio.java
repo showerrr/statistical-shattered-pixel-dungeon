@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,7 +97,9 @@ public class Scorpio extends Mob {
 	@Override
 	public void aggro(Char ch) {
 		//cannot be aggroed to something it can't see
-		if (ch == null || fieldOfView == null || fieldOfView[ch.pos]) {
+		//skip this check if FOV isn't initialized
+		if (ch == null || fieldOfView == null
+				|| fieldOfView.length != Dungeon.level.length() || fieldOfView[ch.pos]) {
 			super.aggro(ch);
 		}
 	}

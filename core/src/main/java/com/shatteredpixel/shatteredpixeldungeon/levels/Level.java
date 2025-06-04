@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -360,8 +360,8 @@ public abstract class Level implements Bundlable {
 
 		version = bundle.getInt( VERSION );
 		
-		//saves from before v1.4.3 are not supported
-		if (version < ShatteredPixelDungeon.v1_4_3){
+		//saves from before v2.3.2 are not supported
+		if (version < ShatteredPixelDungeon.v2_3_2){
 			throw new RuntimeException("old save");
 		}
 
@@ -591,6 +591,9 @@ public abstract class Level implements Bundlable {
 		if (foodImmune != null) foodImmune.detach();
 		ScrollOfChallenge.ChallengeArena arena = Dungeon.hero.buff(ScrollOfChallenge.ChallengeArena.class);
 		if (arena != null) arena.detach();
+		//awareness also doesn't, honestly it's weird that it's a buff
+		Awareness awareness = Dungeon.hero.buff(Awareness.class);
+		if (awareness != null) awareness.detach();
 
 		Char ally = Stasis.getStasisAlly();
 		if (Char.hasProp(ally, Char.Property.IMMOVABLE)){
@@ -737,7 +740,9 @@ public abstract class Level implements Bundlable {
 		PathFinder.buildDistanceMap(Dungeon.hero.pos, BArray.or(passable, avoid, null));
 
 		Mob mob = createMob();
-		mob.state = mob.WANDERING;
+		if (mob.state != mob.PASSIVE) {
+			mob.state = mob.WANDERING;
+		}
 		int tries = 30;
 		do {
 			mob.pos = randomRespawnCell(mob);
@@ -924,6 +929,12 @@ public abstract class Level implements Bundlable {
 		level.avoid[cell]			= (flags & Terrain.AVOID) != 0;
 		level.pit[cell]			    = (flags & Terrain.PIT) != 0;
 		level.water[cell]			= terrain == Terrain.WATER;
+
+		if (level instanceof SewerLevel){
+			if (level.map[cell] == Terrain.REGION_DECO || level.map[cell] == Terrain.REGION_DECO_ALT){
+				level.flamable[cell] = true;
+			}
+		}
 
 		for (int i : PathFinder.NEIGHBOURS9){
 			i = cell + i;
@@ -1468,8 +1479,8 @@ public abstract class Level implements Bundlable {
 
 	}
 
-	public boolean isLevelExplored( int depth ){
-		return false;
+	public float levelExplorePercent( int depth ){
+		return 0;
 	}
 	
 	public int distance( int a, int b ) {

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,15 +48,28 @@ public class Bag extends Item implements Iterable<Item> {
 	}
 	
 	public Char owner;
-	
+
 	public ArrayList<Item> items = new ArrayList<>();
 
 	public int capacity(){
 		return 20; // default container size
 	}
-	
+
+	//if an item is being quick-used from the bag, the bag should take on its targeting properties
+	public Item quickUseItem;
+
+	@Override
+	public int targetingPos(Hero user, int dst) {
+		if (quickUseItem != null){
+			return quickUseItem.targetingPos(user, dst);
+		} else {
+			return super.targetingPos(user, dst);
+		}
+	}
+
 	@Override
 	public void execute( Hero hero, String action ) {
+		quickUseItem = null;
 
 		super.execute( hero, action );
 

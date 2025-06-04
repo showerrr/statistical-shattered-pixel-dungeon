@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -183,15 +183,7 @@ public class Dungeon {
 				} else {
 					lim.count = 0;
 				}
-				
-			}
 
-			//pre-v2.2.0 saves
-			if (Dungeon.version < 750
-					&& Dungeon.isChallenged(Challenges.NO_SCROLLS)
-					&& UPGRADE_SCROLLS.count > 0){
-				//we now count SOU fully, and just don't drop every 2nd one
-				UPGRADE_SCROLLS.count += UPGRADE_SCROLLS.count-1;
 			}
 		}
 
@@ -318,7 +310,6 @@ public class Dungeon {
 		Actor.clear();
 		
 		Level level;
-
 		if (branch == 0) {
 			switch (depth) {
 				case 1:
@@ -756,15 +747,7 @@ public class Dungeon {
 		
 		Bundle bundle = FileUtils.bundleFromFile( GamesInProgress.gameFile( save ) );
 
-		//pre-1.3.0 saves
-		if (bundle.contains(INIT_VER)){
-			initialVersion = bundle.getInt( INIT_VER );
-		} else {
-			initialVersion = bundle.getInt( VERSION );
-		}
-
-		StaticStorage.restoreFromBundle(bundle);
-
+		initialVersion = bundle.getInt( INIT_VER );
 		version = bundle.getInt( VERSION );
 
 		seed = bundle.contains( SEED ) ? bundle.getLong( SEED ) : DungeonSeed.randomSeed();
@@ -818,6 +801,26 @@ public class Dungeon {
 			
 			SpecialRoom.restoreRoomsFromBundle(bundle);
 			SecretRoom.restoreRoomsFromBundle(bundle);
+
+			generatedLevels.clear();
+			for (int i : bundle.getIntArray(GENERATED_LEVELS)){
+				generatedLevels.add(i);
+			}
+
+			droppedItems = new SparseArray<>();
+			for (int i=1; i <= 26; i++) {
+
+				//dropped items
+				ArrayList<Item> items = new ArrayList<>();
+				if (bundle.contains(Messages.format( DROPPED, i )))
+					for (Bundlable b : bundle.getCollection( Messages.format( DROPPED, i ) ) ) {
+						items.add( (Item)b );
+					}
+				if (!items.isEmpty()) {
+					droppedItems.put( i, items );
+				}
+
+			}
 		}
 		
 		Bundle badges = bundle.getBundle(BADGES);
@@ -841,32 +844,6 @@ public class Dungeon {
 		Statistics.restoreFromBundle( bundle );
 		Generator.restoreFromBundle( bundle );
 
-		generatedLevels.clear();
-		if (bundle.contains(GENERATED_LEVELS)){
-			for (int i : bundle.getIntArray(GENERATED_LEVELS)){
-				generatedLevels.add(i);
-			}
-		//pre-v2.1.1 saves
-		} else  {
-			for (int i = 1; i <= Statistics.deepestFloor; i++){
-				generatedLevels.add(i);
-			}
-		}
-
-		droppedItems = new SparseArray<>();
-		for (int i=1; i <= 26; i++) {
-			
-			//dropped items
-			ArrayList<Item> items = new ArrayList<>();
-			if (bundle.contains(Messages.format( DROPPED, i )))
-				for (Bundlable b : bundle.getCollection( Messages.format( DROPPED, i ) ) ) {
-					items.add( (Item)b );
-				}
-			if (!items.isEmpty()) {
-				droppedItems.put( i, items );
-			}
-
-		}
 	}
 	
 	public static Level loadLevel( int save ) throws IOException {
@@ -935,7 +912,7 @@ public class Dungeon {
 
 	public static void updateLevelExplored(){
 		if (branch == 0 && level instanceof RegularLevel && !Dungeon.bossLevel()){
-			Statistics.floorsExplored.put( depth, level.isLevelExplored(depth));
+			Statistics.floorsExplored.put( depth, level.levelExplorePercent(depth));
 		}
 	}
 

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,8 +38,8 @@ public class MossyClump extends Trinket {
 
 	@Override
 	protected int upgradeEnergyCost() {
-		//6 -> 20(26) -> 25(51) -> 30(81)
-		return 20+5*level();
+		//6 -> 10(16) -> 15(31) -> 20(51)
+		return 10+5*level();
 	}
 
 	@Override

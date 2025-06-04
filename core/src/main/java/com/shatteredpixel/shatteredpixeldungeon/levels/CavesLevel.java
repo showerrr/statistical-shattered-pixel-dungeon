@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,7 +116,7 @@ public class CavesLevel extends RegularLevel {
 	@Override
 	public boolean activateTransition(Hero hero, LevelTransition transition) {
 		if (transition.type == LevelTransition.Type.BRANCH_EXIT
-				&& (!Blacksmith.Quest.given() || Blacksmith.Quest.oldQuestMineBlocked() || Blacksmith.Quest.completed() || !Blacksmith.Quest.started())) {
+				&& (!Blacksmith.Quest.given() || Blacksmith.Quest.completed() || !Blacksmith.Quest.started())) {
 
 			Blacksmith smith = null;
 			for (Char c : Actor.chars()){
@@ -126,11 +126,9 @@ public class CavesLevel extends RegularLevel {
 				}
 			}
 
-			if (Blacksmith.Quest.oldQuestMineBlocked()){
-				GLog.w(Messages.get(Blacksmith.class, "cant_enter_old"));
-			} else if (smith == null || !Blacksmith.Quest.given() || Blacksmith.Quest.completed()) {
+			if (smith == null || !Blacksmith.Quest.given() || Blacksmith.Quest.completed()) {
 				GLog.w(Messages.get(Blacksmith.class, "entrance_blocked"));
-			} else if (!Blacksmith.Quest.started() && Blacksmith.Quest.Type() != Blacksmith.Quest.OLD){
+			} else {
 				final Pickaxe pick = hero.belongings.getItem(Pickaxe.class);
 				Game.runOnRenderThread(new Callback() {
 					@Override
@@ -201,6 +199,9 @@ public class CavesLevel extends RegularLevel {
 				return Messages.get(CavesLevel.class, "high_grass_name");
 			case Terrain.WATER:
 				return Messages.get(CavesLevel.class, "water_name");
+			case Terrain.REGION_DECO:
+			case Terrain.REGION_DECO_ALT:
+				return Messages.get(CavesLevel.class, "region_deco_name");
 			default:
 				return super.tileName( tile );
 		}
@@ -220,6 +221,9 @@ public class CavesLevel extends RegularLevel {
 				return Messages.get(CavesLevel.class, "wall_deco_desc");
 			case Terrain.BOOKSHELF:
 				return Messages.get(CavesLevel.class, "bookshelf_desc");
+			case Terrain.REGION_DECO:
+			case Terrain.REGION_DECO_ALT:
+				return Messages.get(CavesLevel.class, "region_deco_desc");
 			default:
 				return super.tileDesc( tile );
 		}

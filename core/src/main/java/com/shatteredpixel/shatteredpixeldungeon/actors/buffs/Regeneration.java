@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,11 @@ public class Regeneration extends Buff {
 						delay /= RingOfEnergy.artifactChargeMultiplier(target);
 					}
 				}
-				delay /= SaltCube.healthRegenMultiplier();
+
+				//salt cube is turned off while regen is disabled.
+				if (target.buff(LockedFloor.class) == null) {
+					delay /= SaltCube.healthRegenMultiplier();
+				}
 
 				partialRegen += 1f / delay;
 

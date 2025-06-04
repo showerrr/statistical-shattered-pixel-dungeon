@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,6 @@ import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class SandalsOfNature extends Artifact {
@@ -256,8 +255,11 @@ public class SandalsOfNature extends Artifact {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
+		seeds.clear();
 		if (bundle.contains(SEEDS) && bundle.getClassArray(SEEDS) != null) {
-			Collections.addAll(seeds, bundle.getClassArray(SEEDS));
+			for (Class<?> seed : bundle.getClassArray(SEEDS)) {
+				if (seed != null) seeds.add(seed);
+			}
 		}
 		curSeedEffect = bundle.getClass(CUR_SEED_EFFECT);
 
