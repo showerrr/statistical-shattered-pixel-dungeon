@@ -118,8 +118,10 @@ public enum DictionaryJournal {
         MOBS.d.put("mob_albino",            DictSpriteSheet.ALBINO);
         MOBS.d.put("mob_snake",             DictSpriteSheet.SNAKE);
         MOBS.d.put("mob_gnoll",             DictSpriteSheet.GNOLL);
+        MOBS.d.put("mob_gnoll_exile",       DictSpriteSheet.GNOLL_EXILE);
         MOBS.d.put("mob_frat",              DictSpriteSheet.F_RAT);
         MOBS.d.put("mob_crab",              DictSpriteSheet.CRAB);
+        MOBS.d.put("mob_hermit_crab",       DictSpriteSheet.HERMIT_CRAB);
         MOBS.d.put("mob_gnoll_darter",      DictSpriteSheet.GNOLL_DARTER);
         MOBS.d.put("mob_swarm",             DictSpriteSheet.SWARM);
         MOBS.d.put("mob_slime",             DictSpriteSheet.SLIME);
@@ -319,6 +321,8 @@ public enum DictionaryJournal {
         TRINKETS.d.put("trinket_vial_of_blood",ItemSpriteSheet.BLOOD_VIAL);
         TRINKETS.d.put("trinket_shard_of_oblivion",ItemSpriteSheet.OBLIVION_SHARD);
         TRINKETS.d.put("trinket_chaotic_censer",ItemSpriteSheet.CHAOTIC_CENSER);
+        TRINKETS.d.put("trinket_ferret_tuft",ItemSpriteSheet.FERRET_TUFT);
+
         //Documents
         DOCUMENTS.d.put("info_intro",       ItemSpriteSheet.EBONY_CHEST);
         DOCUMENTS.d.put("info_tier",        ItemSpriteSheet.GLAIVE);

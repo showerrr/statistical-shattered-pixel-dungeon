@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Eye;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.FetidRat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Ghoul;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollExile;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollGeomancer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollGuard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollSapper;
@@ -38,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GoldenMimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Golem;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GreatCrab;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Guard;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.HermitCrab;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
@@ -228,7 +230,7 @@ public class MobPlacer extends TestItem {
 
     private class WndSetMob extends Window{
 
-        private static final int WIDTH = 120;
+        private static final int WIDTH = 140;
         private static final int HEIGHT = 118;
         private static final int BTN_SIZE = 18;
         private static final int GAP = 2;
@@ -418,9 +420,11 @@ public class MobPlacer extends TestItem {
         RAT(Rat.class, DictSpriteSheet.RAT),
         //TESTRAT(TestRat.class, DictSpriteSheet.RAT),
         GNOLL(Gnoll.class, DictSpriteSheet.GNOLL),
+        GNOLL_EXILE (GnollExile.class,DictSpriteSheet.GNOLL_EXILE),
         SNAKE(Snake.class, DictSpriteSheet.SNAKE),
         ALBINO(Albino.class, DictSpriteSheet.ALBINO),
         CRAB(Crab.class, DictSpriteSheet.CRAB),
+        HERMIT_CRAB(HermitCrab.class, DictSpriteSheet.HERMIT_CRAB),
         SWARM(Swarm.class, DictSpriteSheet.SWARM),
         SLIME(Slime.class, DictSpriteSheet.SLIME),
         C_SLIME(CausticSlime.class, DictSpriteSheet.CAUSTIC_SLIME),

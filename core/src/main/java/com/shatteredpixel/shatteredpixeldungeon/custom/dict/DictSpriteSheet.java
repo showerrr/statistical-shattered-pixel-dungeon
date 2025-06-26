@@ -54,10 +54,14 @@ public class DictSpriteSheet {
             case F_RAT:
                 return new Image(Assets.Sprites.RAT, 0, 30, 16, 15);
             case GNOLL_DARTER:
-                return new Image(Assets.Sprites.GNOLL, 0, 15, 12, 15);
+                return new Image(Assets.Sprites.GNOLL, 0, 30, 12, 15);
             case CAUSTIC_SLIME:
                 return new Image(Assets.Sprites.SLIME, 14, 12, 14, 12);
             case GREAT_CRAB:
+                return new Image(Assets.Sprites.CRAB, 0, 32, 16, 16);
+            case GNOLL_EXILE:
+                return new Image(Assets.Sprites.GNOLL, 0, 15, 12, 15);
+            case HERMIT_CRAB:
                 return new Image(Assets.Sprites.CRAB, 0, 16, 16, 16);
 
             case THIEF:
@@ -237,14 +241,18 @@ public class DictSpriteSheet {
     public static final int RAT             = 200 + 10000;
     public static final int ALBINO          = 201 + 10000;
     public static final int GNOLL           = 202 + 10000;
-    public static final int SNAKE           = 203 + 10000;
-    public static final int CRAB            = 204 + 10000;
-    public static final int SWARM           = 205 + 10000;
-    public static final int SLIME           = 206 + 10000;
-    public static final int CAUSTIC_SLIME   = 207 + 10000;
-    public static final int F_RAT           = 208 + 10000;
-    public static final int GNOLL_DARTER    = 209 + 10000;
-    public static final int GREAT_CRAB      = 210 + 10000;
+    public static final int GNOLL_EXILE     = 203 + 10000;
+    public static final int SNAKE           = 204 + 10000;
+    public static final int CRAB            = 205 + 10000;
+    public static final int HERMIT_CRAB     = 206 + 10000;
+    public static final int SWARM           = 207 + 10000;
+    public static final int SLIME           = 208 + 10000;
+    public static final int CAUSTIC_SLIME   = 209 + 10000;
+    public static final int F_RAT           = 210 + 10000;
+    public static final int GNOLL_DARTER    = 211 + 10000;
+    public static final int GREAT_CRAB      = 212 + 10000;
+
+
 
     public static final int THIEF           = 300 + 10000;
     public static final int BANDIT          = 301 + 10000;

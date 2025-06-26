@@ -26,7 +26,7 @@ public class ThornsShield extends FlavourBuff {
     @Override
     public void fx(boolean on) {
         super.fx(on);
-        if(on) target.sprite.aura(0xFF0000);
+        if(on) target.sprite.aura(0xFF0000,5);
         else{
             target.sprite.clearAura();
         }
