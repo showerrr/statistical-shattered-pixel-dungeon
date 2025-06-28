@@ -158,6 +158,9 @@ public class SeedFindScene extends PixelScene {
                     text = DungeonSeed.formatText(text);
                     long seed = DungeonSeed.convertFromText(text);
 
+                    content = list.content();
+                    content.clear();
+
                     RenderedTextBlock renderedTextBlock = PixelScene.renderTextBlock(new SeedFinder().logSeedItems(Long.toString(seed),26),9);
                     renderedTextBlock.setRect((Camera.main.width - colWidth)/2f, 12, colWidth, 0);
                     content.add(renderedTextBlock);
