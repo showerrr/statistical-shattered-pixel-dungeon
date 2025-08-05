@@ -279,7 +279,7 @@ public class Imp extends NPC {
 		}
 		
 		public static boolean isCompleted() {
-			return completed;
+			return spawned && completed;
 		}
 	}
 }
