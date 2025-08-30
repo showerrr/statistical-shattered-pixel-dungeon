@@ -212,7 +212,4 @@ public class Statue extends Mob {
 		return statue;
 	}
 
-	public Weapon weapon() {
-		return weapon;
-	}
 }

@@ -1,5 +1,3 @@
-*** WARNING ***
-If you want to build a new package, ignore the "last commit" on Sep 24, 2022 because this version contains unfinishend content which may affect normal gameplay.
 
 # Statitstical-Shattered-Pixel-Dungeon #
 

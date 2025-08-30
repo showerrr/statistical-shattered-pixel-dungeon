@@ -1,5 +1,9 @@
 buildscript {
     repositories {
+        maven{ url 'https://maven.aliyun.com/repository/public'}
+        maven { url 'https://maven.aliyun.com/repositories/jcenter' }
+        maven { url 'https://maven.aliyun.com/repositories/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
         google()
         mavenCentral()
     }
@@ -16,16 +20,16 @@ allprojects {
         appName = 'Statistical SPD'
         appPackageName = 'com.shatteredpixel.shatteredpixeldungeon.statistical'
 
-        appVersionCode = 20250629
-        appVersionName = '3.1.0-stat-2'
+        appVersionCode = 20250825
+        appVersionName = '3.2.0-stat-1'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
-        appAndroidCompileSDK = 35   //Android 15
+        appAndroidCompileSDK = 33   //Android 15
         appAndroidMinSDK = 14       //Android 4.0
         //significant layout management changes required for API 35+ as edge-to-edge is forced on
         //will do this at the same time as dropping support for Android 4.4- (later in 2025)
-        appAndroidTargetSDK = 34    //Android 14
+        appAndroidTargetSDK = 33    //Android 14
 
         gdxVersion = '1.12.1'
         gdxControllersVersion = '2.2.4'
@@ -34,6 +38,11 @@ allprojects {
     version = appVersionName
 
     repositories {
+        maven{ url 'https://maven.aliyun.com/repository/public'}
+        maven { url 'https://maven.aliyun.com/repositories/jcenter' }
+        maven { url 'https://maven.aliyun.com/repositories/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url "https://jitpack.io" }
         google()
         mavenCentral()
         maven { url 'https://central.sonatype.com/repository/maven-snapshots/' }

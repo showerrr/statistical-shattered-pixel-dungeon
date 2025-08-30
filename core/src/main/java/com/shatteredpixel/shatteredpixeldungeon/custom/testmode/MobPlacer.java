@@ -67,6 +67,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Warlock;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.custom.dict.DictSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -143,6 +144,10 @@ public class MobPlacer extends TestItem {
                                 if (m instanceof Mimic) {
                                     ((Mimic)m).items = null;
                                     ((Mimic)m).setLevel(Dungeon.depth);
+                                    if (m instanceof CrystalMimic) {
+                                        ((CrystalMimic)m).items = new ArrayList<>();
+                                        ((CrystalMimic)m).items.add(Generator.random());
+                                    }
                                 }
                                 GameScene.add(m);
                                 if(elite_op>0){

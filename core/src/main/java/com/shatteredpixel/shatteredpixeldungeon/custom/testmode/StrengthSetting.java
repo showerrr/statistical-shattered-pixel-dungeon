@@ -46,7 +46,7 @@ public class StrengthSetting extends TestItem {
 
         public SettingsWindow() {
             super();
-            str = new OptionSlider("Strength","1","30",1,30) {
+            str = new OptionSlider("力量","1","30",1,30) {
                 @Override
                 protected void onChange() {
                     text.text("力量: " + str.getSelectedValue() + "，等级: " + level.getSelectedValue());
@@ -56,7 +56,7 @@ public class StrengthSetting extends TestItem {
             str.setRect(0,0,120,24);
             add(str);
 
-            level = new OptionSlider("Level","1","30",1,30) {
+            level = new OptionSlider("等级","1","30",1,30) {
                 @Override
                 protected void onChange() {
                     text.text("力量: " + str.getSelectedValue() + "，等级: " + level.getSelectedValue());

@@ -117,7 +117,7 @@ public class TestMelee extends TestGenerator {
         weapon_id = bundle.getInt("weapon_id");
     }
 
-    private Class<? extends Weapon.Enchantment> generateEnchant(int category, int id) {
+    public static Class<? extends Weapon.Enchantment> generateEnchant(int category, int id) {
         if (category == 1) switch (id) {
             case 0:
                 return Blazing.class;

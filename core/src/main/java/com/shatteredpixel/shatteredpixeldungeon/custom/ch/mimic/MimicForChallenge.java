@@ -1193,8 +1193,11 @@ public class MimicForChallenge extends Mimic {
     @Override
     public void rollToDropLoot(){
 
-        if (items != null) {
+        if (items != null && !items.isEmpty()) {
             for (Item item : items) {
+                if (item == null) {
+                    continue;
+                }
                 if (item.quantity() == 0) {
                     item.quantity(1);
                 }

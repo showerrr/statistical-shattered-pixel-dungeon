@@ -78,7 +78,7 @@ dependencies {
     natives "com.badlogicgames.gdx:gdx-freetype-platform:1.11.0:natives-x86_64"
     implementation "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
 
-    implementation 'cat.ereza:customactivityoncrash:2.4.0'
+    implementation 'cat.ereza:customactivityoncrash:2.2.0'
 
 //    implementation platform('com.google.firebase:firebase-bom:30.3.1')
 //

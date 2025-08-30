@@ -2,7 +2,10 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Rapier;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Bolas;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.FishingSpear;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ForceCube;
@@ -15,6 +18,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingCl
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingHammer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpear;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Tomahawk;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Trident;
@@ -23,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
 import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.OptionSlider;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
@@ -46,6 +51,9 @@ public class TestMissile extends TestGenerator {
     private int levelToGen = 0;
     private boolean bowGenerated = false;
 
+    private int enchant_id = 0;
+    private int enchant_rarity = 0;
+
     private static final String AC_BOW = "bow";
 
     @Override
@@ -67,10 +75,22 @@ public class TestMissile extends TestGenerator {
         }
     }
 
-    private void createMissiles(){
-        MissileWeapon m = Reflection.newInstance(missileList.get(selected));
+    private void modify(MissileWeapon m) {
         m.level(levelToGen);
         m.quantity(item_quantity);
+        Class<? extends Weapon.Enchantment> ench = TestMelee.generateEnchant(enchant_rarity, enchant_id);
+        if (ench == null) {
+            m.enchant(null);
+        } else {
+            m.enchant(Reflection.newInstance(ench));
+        }
+        m.cursed = cursed;
+    }
+
+    private void createMissiles(){
+        MissileWeapon m = Reflection.newInstance(missileList.get(selected));
+        modify(m);
+        m.identify();
         if(m.collect()){
             GLog.i(Messages.get(this, "collect_success", m.name()));
         }else{
@@ -131,15 +151,28 @@ public class TestMissile extends TestGenerator {
                 return Trident.class;
             case 14:
                 return ForceCube.class;
+            case 15:
+                return ThrowingSpike.class;
         }
     }
 
     private void buildList() {
         if (missileList.isEmpty()) {
-            for (int i = 0; i < 15; ++i) {
+            for (int i = 0; i < 16; ++i) {
                 missileList.add(idToMissile(i));
             }
         }
+    }
+
+    private String currentEnchName(Class<? extends Weapon.Enchantment> ench) {
+        if (enchant_rarity < 4)
+            return currentEnchName(ench, Messages.get(Weapon.Enchantment.class, "enchant"));
+        else
+            return currentEnchName(ench, Messages.get(Item.class, "curse"));
+    }
+
+    private String currentEnchName(Class<? extends Weapon.Enchantment> ench, String wepName) {
+        return Messages.get(ench, "name", wepName);
     }
 
     private class SettingsWindow extends Window {
@@ -151,6 +184,10 @@ public class TestMissile extends TestGenerator {
         private static final int WIDTH = 120;
         private static final int BTN_SIZE = 19;
         private static final int GAP = 2;
+        private RenderedTextBlock t_infoEnchant;
+        private OptionSlider o_enchant_rarity;
+        private OptionSlider o_enchant_id;
+        private CheckBox c_curse;
 
         public SettingsWindow() {
             buildList();
@@ -181,6 +218,40 @@ public class TestMissile extends TestGenerator {
             o_quantity.setRect(0, t_select.bottom() + 2 * GAP, WIDTH, 24);
             add(o_quantity);
 
+            t_infoEnchant = PixelScene.renderTextBlock("", 6);
+            t_infoEnchant.text(enchantDesc());
+            add(t_infoEnchant);
+
+            o_enchant_rarity = new OptionSlider(Messages.get(this, "enchant_rarity"), "0", "4", 0, 4) {
+                @Override
+                protected void onChange() {
+                    enchant_rarity = getSelectedValue();
+                    updateEnchantText();
+                }
+            };
+            o_enchant_rarity.setSelectedValue(enchant_rarity);
+            add(o_enchant_rarity);
+
+            o_enchant_id = new OptionSlider(Messages.get(this, "enchant_id"), "0", "7", 0, 7) {
+                @Override
+                protected void onChange() {
+                    enchant_id = getSelectedValue();
+                    updateEnchantText();
+                }
+            };
+            o_enchant_id.setSelectedValue(enchant_id);
+            add(o_enchant_id);
+
+            c_curse = new CheckBox(Messages.get(this, "curse")) {
+                @Override
+                protected void onClick() {
+                    super.onClick();
+                    cursed = checked();
+                }
+            };
+            c_curse.checked(cursed);
+            add(c_curse);
+
             b_create = new RedButton(Messages.get(this, "create_button")) {
                 @Override
                 protected void onClick() {
@@ -200,7 +271,11 @@ public class TestMissile extends TestGenerator {
             t_select.setPos(0, buttonList.get(buttonList.size() - 1).bottom() + GAP);
             o_level.setRect(0, t_select.bottom() + 2 * GAP, WIDTH, 24);
             o_quantity.setRect(0, o_level.bottom() + GAP, WIDTH, 24);
-            b_create.setRect(0, o_quantity.bottom() + GAP, WIDTH, 16);
+            t_infoEnchant.setPos(0, GAP + o_quantity.bottom());
+            o_enchant_rarity.setRect(0, GAP + t_infoEnchant.bottom(), WIDTH, 24);
+            o_enchant_id.setRect(0, GAP + o_enchant_rarity.bottom(), WIDTH, 24);
+            c_curse.setRect(0, GAP + o_enchant_id.bottom(), WIDTH/2f - GAP/2f, 16);
+            b_create.setRect(0, c_curse.bottom() + GAP, WIDTH, 16);
             resize(WIDTH, (int) b_create.bottom() );
         }
 
@@ -238,6 +313,19 @@ public class TestMissile extends TestGenerator {
             }
         }
 
+        private void updateEnchantText() {
+            t_infoEnchant.text(enchantDesc());
+            layout();
+        }
+
+        private String enchantDesc() {
+            //String desc = Messages.get(BossRushMelee.class, "enchant_id_pre", enchant_rarity);
+            String desc = "";
+            String key = "enchant_id_e" + String.valueOf(enchant_rarity);
+            Class<? extends Weapon.Enchantment> ench = TestMelee.generateEnchant(enchant_rarity, enchant_id);
+            desc += Messages.get(TestMelee.class, key, (ench == null ? Messages.get(TestMelee.class, "null_enchant") : currentEnchName(ench)));
+            return desc;
+        }
 
     }
 }

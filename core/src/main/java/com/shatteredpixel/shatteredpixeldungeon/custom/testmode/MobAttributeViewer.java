@@ -162,8 +162,9 @@ public class MobAttributeViewer extends TestItem{
             health.level(ch);
             add(health);
 
-            buffs = new BuffIndicator(ch, false);
-            add(buffs);
+            //检查hero自身会出bug，先注释掉吧
+//            buffs = new BuffIndicator(ch, false);
+//            add(buffs);
         }
 
         @Override
@@ -174,10 +175,10 @@ public class MobAttributeViewer extends TestItem{
 
             health.setRect( GAP, name.bottom() + GAP, width - GAP * 2, health.height());
 
-            buffs.setPos(
-                name.right() + GAP - 1,
-                name.bottom() - BuffIndicator.SIZE_SMALL - 2
-            );
+//            buffs.setPos(
+//                name.right() + GAP - 1,
+//                name.bottom() - BuffIndicator.SIZE_SMALL - 2
+//            );
 
             height = health.bottom();
         }
